@@ -18,7 +18,7 @@ public class Biblioteca {
     public static void main(String[] args) {
         //muestra del formulario
         frmBiblioteca frm = new frmBiblioteca();
-        frm.setVisible(true);
+        int carlos;
 
     }
 }
