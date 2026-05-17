@@ -1,0 +1,53 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# docker-compose.prod.yml  —  Production overrides for Sublix.cr
+#
+# Extends docker-compose.yml with:
+#   - Nginx reverse proxy (handles SSL termination)
+#   - No volume mounts (uses built images only)
+#   - Stricter restart policies
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# ─────────────────────────────────────────────────────────────────────────────
+
+version: "3.9"
+
+services:
+
+  # ── Nginx Reverse Proxy (production only) ──────────────────────────────────
+  nginx:
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    container_name: sublix_nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - nginx_certs:/etc/nginx/certs             # TLS certificates (Let's Encrypt)
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - sublix_network
+
+  # ── Override backend for production ───────────────────────────────────────
+  backend:
+    volumes: []                                  # No bind mounts in production
+    environment:
+      - ENVIRONMENT=production
+
+  # ── Override frontend for production ──────────────────────────────────────
+  frontend:
+    volumes: []                                  # No bind mounts in production
+    environment:
+      - NODE_ENV=production
+
+  # ── PostgreSQL stays the same but with stricter restart ───────────────────
+  db:
+    restart: always
+
+volumes:
+  nginx_certs:

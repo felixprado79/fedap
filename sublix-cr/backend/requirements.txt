@@ -1,0 +1,46 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# requirements.txt  —  Python dependencies for Sublix FastAPI backend
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Web framework ─────────────────────────────────────────────────────────────
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+
+# ── Database ──────────────────────────────────────────────────────────────────
+sqlalchemy[asyncio]==2.0.36
+asyncpg==0.30.0                 # Async PostgreSQL driver
+alembic==1.14.0                 # Database migrations
+psycopg2-binary==2.9.10         # Sync driver (used by Alembic CLI)
+
+# ── Auth & Security ───────────────────────────────────────────────────────────
+python-jose[cryptography]==3.3.0  # JWT tokens
+passlib[bcrypt]==1.7.4            # Password hashing
+python-dotenv==1.0.1              # .env file loading
+
+# ── Rate limiting ─────────────────────────────────────────────────────────────
+# slowapi wraps the 'limits' library with a FastAPI-compatible decorator API.
+# Default backend: in-memory (resets on restart).
+# Production: swap storage_uri to "redis://localhost:6379" for multi-instance.
+slowapi==0.1.9
+limits==3.14.0
+
+# ── Validation & Settings ─────────────────────────────────────────────────────
+pydantic==2.10.3
+pydantic-settings==2.7.0         # .env loading via BaseSettings
+python-multipart==0.0.12         # Form data / file uploads
+email-validator==2.2.0           # EmailStr validation in Pydantic
+
+# ── Email ─────────────────────────────────────────────────────────────────────
+fastapi-mail==1.4.1
+
+# ── HTTP client (for external integrations) ───────────────────────────────────
+httpx==0.28.1
+
+# ── Utilities ─────────────────────────────────────────────────────────────────
+python-slugify==8.0.4
+Pillow==11.0.0                   # Image processing (thumbnails)
+
+# ── Testing ───────────────────────────────────────────────────────────────────
+pytest==8.3.4
+pytest-asyncio==0.24.0
+# httpx is also the async test client for FastAPI TestClient
